@@ -74,8 +74,29 @@ function ButtonController($scope) {
 
 }
 
+function DrawController($scope) {
+	$scope.bounds = null;
+
+	$scope.$watch('game', function(game) {
+		if(!game) return;
+		$scope.bounds = game.bounds;
+	});
+
+	$scope.getGameWidth = function() {
+		return $scope.bounds ? $scope.bounds.w() : 0;
+	};
+	$scope.getGameHeight = function() {
+		return $scope.bounds ? $scope.bounds.h() : 0;
+	};
+	$scope.getGameScale = function(canvas) {
+		var gameWidth = $scope.getGameWidth();
+		return gameWidth ? Math.floor(canvas.width / gameWidth) : 1;
+	};
+}
+
 angular.module('tppCoords.controllers', []).
 controller('GameController', ['$scope', 'tppGames', GameController]).
 controller('PrefsController', ['$rootScope', '$window', PrefsController]).
 controller('MenuController', ['$scope', MenuController]).
-controller('ButtonController', ['$scope', ButtonController]);
+controller('ButtonController', ['$scope', ButtonController]).
+controller('DrawController', ['$scope', DrawController]);

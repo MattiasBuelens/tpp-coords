@@ -105,7 +105,7 @@
 									</small>
 								</label>
 								<div class="refs"
-									ng-if="button.getRefs().length > 0">
+									ng-if="button.getRefs().length">
 									<span
 										data-ng-repeat-start="ref in ::button.getRefs()"
 										data-ng-if="!$first">,</span>
@@ -147,9 +147,10 @@
 		</p>
 
 
-		<div class="layers">
+		<div class="layers"
+			data-ng-controller="DrawController">
 			<canvas id="zoom"  width="1024" height="768" data-tpp-canvas-img="zoomImage"></canvas>
-			<canvas id="grid"  width="1024" height="768"></canvas>
+			<canvas id="grid"  width="1024" height="768" data-tpp-canvas-grid></canvas>
 			<canvas id="main"  width="1024" height="768"></canvas>
 			<canvas id="varia" width="1024" height="768"></canvas>
 			<canvas id="click" width="1024" height="768"></canvas>
