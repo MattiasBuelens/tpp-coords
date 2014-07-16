@@ -16,6 +16,45 @@ State.HIT.next		= State.MISS;
 State.MISS.next		= State.IGNORE;
 State.IGNORE.next	= State.HIT;
 
+function CanSetState() {
+};
+angular.extend(CanSetState.prototype, {
+	setState: function(newState) {
+		throw new Error("Missing setState implementation");
+	},
+	setHit: function () {
+		this.setState(State.HIT);
+	},
+	setMiss: function () {
+		this.setState(State.MISS);
+	},
+	setIgnore: function () {
+		this.setState(State.IGNORE);
+	}
+});
+
+function HasState() {
+	this.state = State.IGNORE;
+};
+HasState.prototype = Object.create(CanSetState.prototype);
+angular.extend(HasState.prototype, {
+	isHit: function () {
+		return this.state === State.HIT;
+	},
+	isMiss: function () {
+		return this.state === State.MISS;
+	},
+	isIgnore: function () {
+		return this.state === State.IGNORE;
+	},
+	setState: function(newState) {
+		this.state = newState;
+	},
+	nextState: function () {
+		this.setState(this.state.next);
+	}
+});
+
 function Rectangle(x1, y1, x2, y2) {
 	if (angular.isArray(x1)) {
 		return Rectangle.apply(this, x1);
@@ -45,6 +84,7 @@ angular.extend(Rectangle.prototype, {
 });
 
 function Game(id, data) {
+	CanSetState.apply(this, arguments);
 	this.id = data.id;
 	this.name = data.name;
 	this.bounds = new Rectangle(data.bounds);
@@ -56,6 +96,7 @@ function Game(id, data) {
 		this.categories.push(this.categoryById[category.id] = category);
 	}
 };
+Game.prototype = Object.create(CanSetState.prototype);
 angular.extend(Game.prototype, {
 	getCategory: function (categoryId) {
 		return this.categoryById[categoryId];
@@ -67,10 +108,16 @@ angular.extend(Game.prototype, {
 	getButton: function (buttonId) {
 		var category = this.getCategory(menuId.substr(0, 1));
 		return category && category.getButton(menuId.substr(1));
+	},
+	setState: function(newState) {
+		angular.forEach(this.categories, function(category) {
+			category.setState(newState);
+		});
 	}
 });
 
 function Category(game, name, data) {
+	CanSetState.apply(this, arguments);
 	this.game = game;
 	this.id = data.id;
 	this.name = name;
@@ -83,6 +130,7 @@ function Category(game, name, data) {
 		this.menus.push(this.menuById[menu.id] = menu);
 	}
 };
+Category.prototype = Object.create(CanSetState.prototype);
 angular.extend(Category.prototype, {
 	getId: function () {
 		return this.id;
@@ -99,41 +147,16 @@ angular.extend(Category.prototype, {
 	getButton: function (buttonId) {
 		var menu = this.getMenu(buttonId.substr(0, 1));
 		return menu && menu.getButton(buttonId.substr(1));
-	}
-});
-
-function Stateful() {
-	this.state = State.IGNORE;
-}
-angular.extend(Stateful.prototype, {
-	isHit: function () {
-		return this.state === State.HIT;
-	},
-	isMiss: function () {
-		return this.state === State.MISS;
-	},
-	isIgnore: function () {
-		return this.state === State.IGNORE;
 	},
 	setState: function(newState) {
-		this.state = newState;
-	},
-	setHit: function () {
-		this.setState(State.HIT);
-	},
-	setMiss: function () {
-		this.setState(State.MISS);
-	},
-	setIgnore: function () {
-		this.setState(State.IGNORE);
-	},
-	nextState: function () {
-		this.setState(this.state.next);
+		angular.forEach(this.menus, function(menu) {
+			menu.setState(newState);
+		});
 	}
 });
 
 function Menu(category, name, data) {
-	Stateful.apply(this, arguments);
+	HasState.apply(this, arguments);
 	this.category = category;
 	this.id = data.id;
 	this.name = name;
@@ -148,7 +171,7 @@ function Menu(category, name, data) {
 		this.buttons.push(this.buttonById[button.id] = button);
 	}
 };
-Menu.prototype = Object.create(Stateful.prototype);
+Menu.prototype = Object.create(HasState.prototype);
 angular.extend(Menu.prototype, {
 	getId: function () {
 		return this.category.getId() + this.id;
@@ -166,7 +189,7 @@ angular.extend(Menu.prototype, {
 		return this.buttonById[buttonId];
 	},
 	setState: function (newState) {
-		Stateful.prototype.setState.apply(this, arguments);
+		HasState.prototype.setState.apply(this, arguments);
 		angular.forEach(this.buttons, function(button) {
 			button.setState(newState);
 		});
@@ -174,7 +197,7 @@ angular.extend(Menu.prototype, {
 });
 
 function Button(menu, name, data) {
-	Stateful.apply(this, arguments);
+	HasState.apply(this, arguments);
 	this.menu = menu;
 	this.id = data.id;
 	this.name = name;
@@ -182,7 +205,7 @@ function Button(menu, name, data) {
 	this.color = null;
 	this.ref = angular.isArray(data.ref) ? data.ref : [data.ref];
 };
-Button.prototype = Object.create(Stateful.prototype);
+Button.prototype = Object.create(HasState.prototype);
 angular.extend(Button.prototype, {
 	getId: function () {
 		return this.menu.getId() + this.id;

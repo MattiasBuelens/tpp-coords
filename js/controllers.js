@@ -11,6 +11,10 @@ function GameController($scope, tppGames) {
 			$scope.games = games;
 		});
 
+		$scope.resetAll = function() {
+			$scope.game.setIgnore();
+		};
+
 		$scope.$watch('games', function (games) {
 			if($scope.gameId && games[$scope.gameId]) return;
 			for(var gameId in games)	{
