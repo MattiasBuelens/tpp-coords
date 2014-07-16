@@ -19,77 +19,78 @@
 	<script src="onset.js"></script>
 </head>
 <body class="rekt-small-disabled grid-disabled">
-<section class="if">
-<h2>In Black 2, if I want to click certain buttons while avoiding others…</h2>
 
-<aside>
-<p><strong>Check</strong> the boxes below to select constraints.
-	<!-- TODO add example URL -->
-	<a href="#" id="example">Example: Fight but avoid items</a><br />
-	As you click, the blue regions update, satisfying the constraints.</p>
-<p>You can share your configuration by copying the URL.
-	<a href="#" onclick="reset_all(); return false">Reset all checkboxes?</a></p>
-</aside>
+	<section class="if">
+		<h2>In Black 2, if I want to click certain buttons while avoiding others…</h2>
 
-<div id="key">
-<p>Key:</p>
-<ul>
-	<li><input type="checkbox" class="noclick"  checked /> I want to click this button</li>
-	<li><input type="checkbox" class="noclick ind"      /> I want to avoid clicking this button</li>
-	<li><input type="checkbox" class="noclick"          /> I don’t care if this button is clicked</li>
-</ul>
-</div>
+		<aside>
+			<p><strong>Check</strong> the boxes below to select constraints.
+				<!-- TODO add example URL -->
+				<a href="#" id="example">Example: Fight but avoid items</a><br />
+				As you click, the blue regions update, satisfying the constraints.</p>
+			<p>You can share your configuration by copying the URL.
+				<a href="#" onclick="reset_all(); return false">Reset all checkboxes?</a></p>
+		</aside>
 
-<p id="toc" class="tm">Jump to a section: </p>
+		<div id="key">
+			<p>Key:</p>
+			<ul>
+				<li><input type="checkbox" class="noclick"  checked /> I want to click this button</li>
+				<li><input type="checkbox" class="noclick ind"      /> I want to avoid clicking this button</li>
+				<li><input type="checkbox" class="noclick"          /> I don’t care if this button is clicked</li>
+			</ul>
+		</div>
 
-<div id="b">
-</div>
+		<p id="toc" class="tm">Jump to a section: </p>
 
-<div id="prefs">
-<p>Preferences:</p>
-<ul>
-	<li><input type="checkbox" id="grid-disabled" /> <label for="grid-disabled">Show grid</label></li>
-	<li><input type="checkbox" id="rekt-small-disabled" /> <label for="rekt-small-disabled">Show coordinates next to button labels</label></li>
-	<li><input type="checkbox" id="refs-disabled" /> <label for="refs-disabled">Show reference links next to button labels</label></li>
-</ul>
-</div>
+		<div id="b">
+		</div>
 
-<p>If you notice any missing menus, missing buttons, incorrect coordinates, or other bugs, or you have an idea for a feature, please <a href="https://github.com/hftf/coords/issues">file an issue</a>.</p>
-</section><!--
+		<div id="prefs">
+		<p>Preferences:</p>
+		<ul>
+			<li><input type="checkbox" id="grid-disabled" /> <label for="grid-disabled">Show grid</label></li>
+			<li><input type="checkbox" id="rekt-small-disabled" /> <label for="rekt-small-disabled">Show coordinates next to button labels</label></li>
+			<li><input type="checkbox" id="refs-disabled" /> <label for="refs-disabled">Show reference links next to button labels</label></li>
+		</ul>
+		</div>
 
---><section class="then">
-<h2>…then I can use these coordinates: <span id="coords-hover"></span></h2>
+		<p>If you notice any missing menus, missing buttons, incorrect coordinates, or other bugs, or you have an idea for a feature, please <a href="https://github.com/hftf/coords/issues">file an issue</a>.</p>
+	</section><!--
 
-<p>
-<strong>Click</strong> below for a list of buttons triggered by the clicked coordinate.<br />
-<strong>Hover</strong> over the blue regions to display coordinates (after selecting constraints).<br />
-</p>
+	--><section class="then">
+		<h2>…then I can use these coordinates: <span id="coords-hover"></span></h2>
+
+		<p>
+			<strong>Click</strong> below for a list of buttons triggered by the clicked coordinate.<br />
+			<strong>Hover</strong> over the blue regions to display coordinates (after selecting constraints).<br />
+		</p>
 
 
-<div class="layers">
-<canvas id="zoom"  width="1024" height="768"></canvas>
-<canvas id="grid"  width="1024" height="768"></canvas>
-<canvas id="main"  width="1024" height="768"></canvas>
-<canvas id="varia" width="1024" height="768"></canvas>
-<canvas id="click" width="1024" height="768"></canvas>
-</div>
+		<div class="layers">
+			<canvas id="zoom"  width="1024" height="768"></canvas>
+			<canvas id="grid"  width="1024" height="768"></canvas>
+			<canvas id="main"  width="1024" height="768"></canvas>
+			<canvas id="varia" width="1024" height="768"></canvas>
+			<canvas id="click" width="1024" height="768"></canvas>
+		</div>
 
-<p id="reset-screenshot" style="display: none;"><a href="#" onclick="State.setImage(); return false">Reset screenshot</a></p>
-<p><strong><input type="text" id="coords-click" /></strong> clicks these buttons:</p>
-<p id="coords-click-errors"></p>
-<div id="overlaps" style="display: none;">
-<p><input type="checkbox" class="noclick"  checked /> I want to click this button<br /><span id="overlaps-checked"></span></p>
-<p><input type="checkbox" class="noclick ind"      /> I want to avoid clicking this button<br /><span id="overlaps-indeterminate"></span></p>
-<p><input type="checkbox" class="noclick"          /> I don’t care if this button is clicked<br /><span id="overlaps-unchecked"></span></p>
-</div>
-</section>
+		<p id="reset-screenshot" style="display: none;"><a href="#" onclick="State.setImage(); return false">Reset screenshot</a></p>
+		<p><strong><input type="text" id="coords-click" /></strong> clicks these buttons:</p>
+		<p id="coords-click-errors"></p>
+		<div id="overlaps" style="display: none;">
+		<p><input type="checkbox" class="noclick"  checked /> I want to click this button<br /><span id="overlaps-checked"></span></p>
+		<p><input type="checkbox" class="noclick ind"      /> I want to avoid clicking this button<br /><span id="overlaps-indeterminate"></span></p>
+		<p><input type="checkbox" class="noclick"          /> I don’t care if this button is clicked<br /><span id="overlaps-unchecked"></span></p>
+		</div>
+	</section>
 
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.15/angular.min.js"></script>
-<script src="js/app.js"></script>
-<script src="js/models.js"></script>
-<script src="js/services.js"></script>
-<script src="js/controllers.js"></script>
-<script src="js/filters.js"></script>
-<script src="js/directives.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.15/angular.min.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/models.js"></script>
+	<script src="js/services.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="js/filters.js"></script>
+	<script src="js/directives.js"></script>
 </body>
 </html>
