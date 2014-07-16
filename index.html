@@ -37,7 +37,15 @@
 			</ul>
 		</div>
 
-		<p id="toc" class="tm">Jump to a section: </p>
+		<p id="toc" class="tm">
+			Jump to a section:
+			<span
+				data-ng-repeat-start="category in game.categories"
+				data-ng-if="!$first"> &middot; </span>
+			<a
+				data-ng-repeat-end=""
+				href="#{{ ::category.getId() }}">{{ ::category.name }}</a>
+		</p>
 
 		<div>
 			<div
