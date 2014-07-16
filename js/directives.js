@@ -3,6 +3,24 @@
 /* Directives */
 
 angular.module('tppCoords.directives', []).
+directive('tppInd', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.prop('indeterminate', true);
+		}
+	}
+}).
+directive('tppNoClick', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.on('click', function(ev) {
+				ev.preventDefault();
+			});
+		}
+	}
+}).
 directive('tppRotate', ['$parse', function($parse) {
 	return {
 		restrict: 'A',
