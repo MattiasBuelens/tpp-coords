@@ -84,7 +84,14 @@
 									id="{{ ::button.getId() }}" />
 								<label
 									for="{{ ::button.getId() }}">
-									<strong>{{ ::button.name }}</strong>
+									<strong>
+										{{ ::button.name }}
+										<span class="permalink">
+											<a
+												href="#{{ ::button.getId() }}"
+												title="Permalink to this button">#</a>
+										</span>
+									</strong>
 									<small
 										class="rekt-color"
 										style="background-color: {{ ::button.color }}">
