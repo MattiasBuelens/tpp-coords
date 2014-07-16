@@ -49,15 +49,16 @@ function PrefsController($rootScope, $window) {
 
 	function loadPrefs() {
 		for(var key in prefs) {
-			prefs[key] = !!$window.localStorage.getItem(key);
+			prefs[key] = !!(1*$window.localStorage.getItem(key));
 		}
 	}
+	loadPrefs();
+
 	$rootScope.$watch('prefs', function () {
 		for(var key in prefs) {
-			$window.localStorage.setItem(key, prefs[key]);
+			$window.localStorage.setItem(key, 1*prefs[key]);
 		}
 	}, true);
-	loadPrefs();
 }
 
 function MenuController($scope) {
