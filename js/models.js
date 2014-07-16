@@ -159,13 +159,14 @@ function Menu(category, name, data) {
 	HasState.apply(this, arguments);
 	this.category = category;
 	this.id = data.id;
+	this.desc = data.desc;
 	this.name = name;
 
 	var colorIdx = 0;
 	this.buttons = [];
 	this.buttonById = {};
 	for (var name in data) {
-		if (name === 'id') continue;
+		if (name === 'id' || name === 'desc') continue;
 		var button = new Button(this, name, data[name]);
 		button.color = palette[colorIdx++ % palette.length];
 		this.buttons.push(this.buttonById[button.id] = button);
@@ -193,6 +194,9 @@ angular.extend(Menu.prototype, {
 		angular.forEach(this.buttons, function(button) {
 			button.setState(newState);
 		});
+	},
+	isMissing: function() {
+		return this.buttons.length === 0;
 	}
 });
 

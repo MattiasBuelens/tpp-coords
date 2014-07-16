@@ -73,7 +73,7 @@
 						</div>
 					</div>
 					<div class="menu-list">
-						<ul>
+						<ul ng-if="!menu.isMissing()">
 							<li
 								data-ng-repeat="button in menu.buttons"
 								data-ng-controller="ButtonController"
@@ -115,6 +115,10 @@
 								</div>
 							</li>
 						</ul>
+						<div ng-if="menu.isMissing()">
+							<p ng-if="menu.desc">&ldquo;{{ ::menu.desc }}&rdquo;</p>
+							<p class="contrib-screen"><a href="https://github.com/hftf/coords/issues/41">Contribute this screen</a></p>
+						</div>
 					</ul>
 				</div>
 			</div>
