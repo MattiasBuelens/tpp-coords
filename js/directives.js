@@ -46,4 +46,34 @@ directive('tppRotate', ['$parse', function($parse) {
 			});
 		}
 	};
-}]);
+}]).
+directive('tppCanvasImg', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			var canvas = element[0],
+				ctx = canvas.getContext('2d'),
+				currImg = null;
+			ctx.webkitImageSmoothingEnabled = false;
+			ctx.mozImageSmoothingEnabled = false;
+
+			// Render
+			function render(imgUrl) {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				if (imgUrl) {
+					var img = new Image();
+					currImg = img;
+					img.onload = function() {
+						if (currImg === img) {
+							ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+						}
+					};
+					img.src = imgUrl;
+				} else {
+					currImg = null;
+				}
+			}
+			scope.$watch(attrs.tppCanvasImg, render);
+		}
+	}
+});

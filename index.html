@@ -69,7 +69,9 @@
 							</label>
 						</h3>
 						<div class="layers">
-							<img data-ng-src="{{ ::menu.getImage() }}" />
+							<img
+								data-ng-src="{{ ::menu.getImage() }}"
+								data-ng-click="setZoomImage(menu.getImage())" />
 						</div>
 					</div>
 					<div class="menu-list">
@@ -146,7 +148,7 @@
 
 
 		<div class="layers">
-			<canvas id="zoom"  width="1024" height="768"></canvas>
+			<canvas id="zoom"  width="1024" height="768" data-tpp-canvas-img="zoomImage"></canvas>
 			<canvas id="grid"  width="1024" height="768"></canvas>
 			<canvas id="main"  width="1024" height="768"></canvas>
 			<canvas id="varia" width="1024" height="768"></canvas>

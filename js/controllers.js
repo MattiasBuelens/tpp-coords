@@ -6,6 +6,7 @@ function GameController($scope, tppGames) {
 	$scope.games = {};
 	$scope.gameId = undefined;
 	$scope.game = undefined;
+	$scope.zoomImage = undefined;
 
 	tppGames.getGames().success(function (games) {
 		$scope.games = games;
@@ -24,6 +25,10 @@ function GameController($scope, tppGames) {
 			$scope.game.getButton('bq'+i).setMiss();
 		}
 	};
+
+	$scope.setZoomImage = function(imgUrl) {
+		$scope.zoomImage = imgUrl;
+	}
 
 	$scope.$watch('games', function (games) {
 		if($scope.gameId && games[$scope.gameId]) return;
