@@ -102,7 +102,8 @@
 										</span>
 									</small>
 								</label>
-								<div class="refs">
+								<div class="refs"
+									ng-if="button.getRefs().length > 0">
 									<span
 										data-ng-repeat-start="ref in ::button.getRefs()"
 										data-ng-if="!$first">,</span>
