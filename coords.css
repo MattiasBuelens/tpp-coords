@@ -143,7 +143,7 @@ section {
 .rekt label {
 	display: inline-block;
 }
-.rekt strong {
+.rekt span.name {
 	display: inline-block;
 	width: 10em;
 }
@@ -172,15 +172,12 @@ label:hover .permalink {
 
 .refs {
 	font-size: 0.8em;
-	color: #888;
+	color: #bbb;
 }
 .refs:before {
 	margin-left: 10%;
 	margin-right: 0.2em;
 	content: "\25b6";
-}
-.refs .NEW, .refs .END {
-	font-weight: bold;
 }
 .refs .NEW {
 	color: #b55;
