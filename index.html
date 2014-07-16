@@ -18,7 +18,9 @@
 	<script src="coords.js"></script>
 	<script src="onset.js"></script>
 </head>
-<body class="rekt-small-disabled grid-disabled">
+<body
+	data-ng-controller="GameController"
+	data-ng-class="{ 'rekt-small-disabled': !prefShowCoords, 'grid-disabled': !prefShowGrid, 'refs-disabled': !prefShowRefs }">
 
 	<section class="if">
 		<h2>In Black 2, if I want to click certain buttons while avoiding others…</h2>
@@ -49,9 +51,9 @@
 		<div id="prefs">
 		<p>Preferences:</p>
 		<ul>
-			<li><input type="checkbox" id="grid-disabled" /> <label for="grid-disabled">Show grid</label></li>
-			<li><input type="checkbox" id="rekt-small-disabled" /> <label for="rekt-small-disabled">Show coordinates next to button labels</label></li>
-			<li><input type="checkbox" id="refs-disabled" /> <label for="refs-disabled">Show reference links next to button labels</label></li>
+			<li><input type="checkbox" id="grid-disabled" data-ng-model="prefShowGrid" /> <label for="grid-disabled">Show grid</label></li>
+			<li><input type="checkbox" id="rekt-small-disabled" data-ng-model="prefShowCoords" /> <label for="rekt-small-disabled">Show coordinates next to button labels</label></li>
+			<li><input type="checkbox" id="refs-disabled" data-ng-model="prefShowRefs" /> <label for="refs-disabled">Show reference links next to button labels</label></li>
 		</ul>
 		</div>
 
