@@ -40,6 +40,26 @@ function GameController($scope, tppGames) {
 	});
 };
 
+function PrefsController($rootScope, $window) {
+	var prefs = $rootScope.prefs = {
+		showGrid: false,
+		showCoords: false,
+		showRefs: false
+	};
+
+	function loadPrefs() {
+		for(var key in prefs) {
+			prefs[key] = !!$window.localStorage.getItem(key);
+		}
+	}
+	$rootScope.$watch('prefs', function () {
+		for(var key in prefs) {
+			$window.localStorage.setItem(key, prefs[key]);
+		}
+	}, true);
+	loadPrefs();
+}
+
 function MenuController($scope) {
 
 }
@@ -50,5 +70,6 @@ function ButtonController($scope) {
 
 angular.module('tppCoords.controllers', []).
 controller('GameController', ['$scope', 'tppGames', GameController]).
+controller('PrefsController', ['$rootScope', '$window', PrefsController]).
 controller('MenuController', ['$scope', MenuController]).
 controller('ButtonController', ['$scope', ButtonController]);
