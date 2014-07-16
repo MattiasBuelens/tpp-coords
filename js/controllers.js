@@ -15,6 +15,16 @@ function GameController($scope, tppGames) {
 			$scope.game.setIgnore();
 		};
 
+		$scope.showExample = function() {
+			$scope.resetAll();
+			for(var i=1; i<=4; i++) {
+				$scope.game.getButton('bf'+i).setHit();
+			}
+			for(var i=1; i<=6; i++) {
+				$scope.game.getButton('bq'+i).setMiss();
+			}
+		};
+
 		$scope.$watch('games', function (games) {
 			if($scope.gameId && games[$scope.gameId]) return;
 			for(var gameId in games)	{

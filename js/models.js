@@ -106,8 +106,8 @@ angular.extend(Game.prototype, {
 		return category && category.getMenu(menuId.substr(1));
 	},
 	getButton: function (buttonId) {
-		var category = this.getCategory(menuId.substr(0, 1));
-		return category && category.getButton(menuId.substr(1));
+		var category = this.getCategory(buttonId.substr(0, 1));
+		return category && category.getButton(buttonId.substr(1));
 	},
 	setState: function(newState) {
 		angular.forEach(this.categories, function(category) {
