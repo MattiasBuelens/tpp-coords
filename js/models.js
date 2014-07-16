@@ -160,7 +160,7 @@ angular.extend(Menu.prototype, {
 		return this.category.getTitle() + " \u2192 " + this.name;
 	},
 	getImage: function () {
-		return '/app/data/' + this.getGame().id + '/screens/' + this.category.name + '/' + this.name + '.png';
+		return '/data/' + this.getGame().id + '/screens/' + this.category.name + '/' + this.name + '.png';
 	},
 	getButton: function (buttonId) {
 		return this.buttonById[buttonId];

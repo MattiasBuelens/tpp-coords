@@ -174,9 +174,10 @@ label:hover .permalink {
 	font-size: 0.8em;
 	color: #888;
 }
-.refs .triangle {
+.refs:before {
 	margin-left: 10%;
 	margin-right: 0.2em;
+	content: "\25b6";
 }
 .refs .NEW, .refs .END {
 	font-weight: bold;

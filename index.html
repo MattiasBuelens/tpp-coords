@@ -11,19 +11,13 @@
 	<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
 	<link rel="stylesheet" type="text/css" href="coords.css"/>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.min.js"></script>
-	<script src="data/black2/data.js"></script>
-	<script src="state.js"></script>
-	<script src="draw.js"></script>
-	<script src="load.js"></script>
-	<script src="coords.js"></script>
-	<script src="onset.js"></script>
 </head>
 <body
 	data-ng-controller="GameController"
 	data-ng-class="{ 'rekt-small-disabled': !prefShowCoords, 'grid-disabled': !prefShowGrid, 'refs-disabled': !prefShowRefs }">
 
 	<section class="if">
-		<h2>In Black 2, if I want to click certain buttons while avoiding others…</h2>
+		<h2>In <select data-ng-model="gameId" data-ng-options="id as name for (id, name) in games"></select>, if I want to click certain buttons while avoiding others…</h2>
 
 		<aside>
 			<p><strong>Check</strong> the boxes below to select constraints.
@@ -45,7 +39,69 @@
 
 		<p id="toc" class="tm">Jump to a section: </p>
 
-		<div id="b">
+		<div>
+			<div
+				data-ng-repeat="category in game.categories"
+				id="{{ ::category.getId() }}"
+				class="category">
+				<h2><strong>{{ ::category.name }}</strong> screens</h2>
+				<div
+					data-ng-repeat="menu in ::category.menus"
+					data-ng-controller="MenuController"
+					class="menu">
+					<div class="menu-heading">
+						<h3>
+							<input
+								type="checkbox"
+								data-tpp-rotate="menu"
+								id="{{ ::menu.getId() }}" />
+							<label
+								for="{{ ::menu.getId() }}">
+								{{ ::menu.name }}
+							</label>
+						</h3>
+						<div class="layers">
+							<img data-ng-src="{{ ::menu.getImage() }}" />
+						</div>
+					</div>
+					<div class="menu-list">
+						<ul>
+							<li
+								data-ng-repeat="button in menu.buttons"
+								data-ng-controller="ButtonController"
+								class="rekt">
+								<input
+									type="checkbox"
+									data-tpp-rotate="button"
+									id="{{ ::button.getId() }}" />
+								<label
+									for="{{ ::button.getId() }}">
+									<strong>{{ ::button.name }}</strong>
+									<small
+										class="rekt-color"
+										style="background-color: {{ ::button.color }}">
+										<span
+											class="rekt-coords">
+											&#8598; {{ ::button.coords.p1() | point }} <br/>
+											&#8600; {{ ::button.coords.p2() | point }}
+										</span>
+									</small>
+								</label>
+								<div class="refs">
+									<span
+										data-ng-repeat-start="ref in ::button.getRefs()"
+										data-ng-if="!$first">,</span>
+									<a
+										data-ng-repeat-end=""
+										href="{{ ::ref.link }}"
+										class="ref {{ ::ref.refClass }}"
+										title="{{ ::ref.title }}">{{ ::ref.name }}</a>
+								</div>
+							</li>
+						</ul>
+					</ul>
+				</div>
+			</div>
 		</div>
 
 		<div id="prefs">
