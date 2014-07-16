@@ -3,27 +3,27 @@
 /* Controllers */
 
 function GameController($scope, tppGames) {
-  	$scope.games = {};
-  	$scope.gameId = undefined;
-  	$scope.game = undefined;
+		$scope.games = {};
+		$scope.gameId = undefined;
+		$scope.game = undefined;
 
-  	tppGames.getGames().success(function (games) {
-  		$scope.games = games;
-  	});''
+		tppGames.getGames().success(function (games) {
+			$scope.games = games;
+		});
 
-  	$scope.$watch('games', function (games) {
-  		if($scope.gameId && games[$scope.gameId]) return;
-  		for(var gameId in games)  {
-  			$scope.gameId = gameId;
-  			break;
-  		}
-  	});
-  	$scope.$watch('gameId', function (gameId) {
-  		if(!gameId) return;
-  		tppGames.getGame(gameId).success(function (game) {
-  			$scope.game = game;
-  		});
-  	});
+		$scope.$watch('games', function (games) {
+			if($scope.gameId && games[$scope.gameId]) return;
+			for(var gameId in games)	{
+				$scope.gameId = gameId;
+				break;
+			}
+		});
+		$scope.$watch('gameId', function (gameId) {
+			if(!gameId) return;
+			tppGames.getGame(gameId).success(function (game) {
+				$scope.game = game;
+			});
+		});
 };
 
 function MenuController($scope) {
