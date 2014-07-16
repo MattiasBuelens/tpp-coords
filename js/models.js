@@ -8,9 +8,9 @@ var palette = [
 ];
 
 var State = {
-	HIT:	{ id: 'HIT',	next: null },
-	MISS:	{ id: 'MISS',	next: null },
-	IGNORE:	{ id: 'IGNORE',	next: null },
+	HIT:	{ key: 'HIT',       next: null },
+	MISS:	{ key: 'MISS',      next: null },
+	IGNORE:	{ key: 'IGNORE',    next: null },
 };
 State.HIT.next		= State.MISS;
 State.MISS.next		= State.IGNORE;
@@ -109,6 +109,13 @@ angular.extend(Game.prototype, {
 		var category = this.getCategory(buttonId.substr(0, 1));
 		return category && category.getButton(buttonId.substr(1));
 	},
+	getButtons: function () {
+		var temps = [];
+		angular.forEach(this.categories, function(category) {
+			temps.push(category.getButtons());
+		});
+		return Array.prototype.concat.apply([], temps);
+	},
 	setState: function(newState) {
 		angular.forEach(this.categories, function(category) {
 			category.setState(newState);
@@ -147,6 +154,13 @@ angular.extend(Category.prototype, {
 	getButton: function (buttonId) {
 		var menu = this.getMenu(buttonId.substr(0, 1));
 		return menu && menu.getButton(buttonId.substr(1));
+	},
+	getButtons: function () {
+		var temps = [];
+		angular.forEach(this.menus, function(menu) {
+			temps.push(menu.getButtons());
+		});
+		return Array.prototype.concat.apply([], temps);
 	},
 	setState: function(newState) {
 		angular.forEach(this.menus, function(menu) {
@@ -188,6 +202,9 @@ angular.extend(Menu.prototype, {
 	},
 	getButton: function (buttonId) {
 		return this.buttonById[buttonId];
+	},
+	getButtons: function () {
+		return this.buttons;
 	},
 	setState: function (newState) {
 		HasState.prototype.setState.apply(this, arguments);
