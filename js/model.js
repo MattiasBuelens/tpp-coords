@@ -92,14 +92,16 @@ ko.utils.extend(Parent.prototype, {
 
 var Game = function(id, name, bounds) {
 	Parent.call(this, null, "");
-	this.gameId = id;
+	this.id = id;
 	this.name = name;
 	this.bounds = bounds;
 
 	// Buttons grouped by state
 	this.buttons = {};
+	this.buttonIDs = {};
 	for (var stateId in State2) {
 		this.buttons[stateId] = ko.computed(this._buttonFilter(State2[stateId]), this);
+		this.buttonIDs[stateId] = ko.computed(this._buttonIDs(this.buttons[stateId]));
 	}
 };
 Game.prototype = Object.create(Parent.prototype);
@@ -108,6 +110,13 @@ ko.utils.extend(Game.prototype, {
 		return function() {
 			return ko.utils.arrayFilter(this.leafs(), function(child) {
 				return child.isState[filterState.id]();
+			});
+		};
+	},
+	_buttonIDs: function(buttonsObservable) {
+		return function() {
+			return ko.utils.arrayMap(buttonsObservable(), function(button) {
+				return button.fullId;
 			});
 		};
 	},
