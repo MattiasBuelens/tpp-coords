@@ -196,14 +196,21 @@ label:hover .permalink {
 	font-size: 0.8em;
 	color: #bbb;
 }
-.refs .triangle {
+.refs:before {
+	content: "\25b6";
 	margin-left: 10%;
 	margin-right: 0.2em;
 }
-.refs .NEW {
+.ref:after {
+	content: ', ';
+}
+.ref:last-child:after {
+	content: '';
+}
+.ref.NEW {
 	color: #b55;
 }
-.refs .END {
+.ref.END {
 	color: #5b5;
 }
 

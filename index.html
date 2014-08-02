@@ -5,9 +5,14 @@
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="coords.css" />
 </head>
-<body class="rekt-small-disabled grid-disabled">
+<body data-bind="css: {
+	'instructions-disabled': !pref.instructions(),
+	'grid-disabled': !pref.grid(),
+	'rekt-small-disabled': !pref.rektCoords(),
+	'refs-disabled': !pref.refs()
+	}">
 <section class="contents">
-<p class="tm"><strong id="game-name">?</strong> version</p>
+<p class="tm"><strong id="game-name" data-bind="text: game().name">?</strong> version</p>
 
 <h3>Contents</h3>
 <ul id="toc" class="nav">
@@ -17,6 +22,13 @@
 		<li><a href="#prefs">Preferences</a></li>
 	</ul>
 	</li>
+	<!-- ko foreach: game().children() -->
+	<li><a data-bind="text: name, attr: { href: '#'+fullId }">Category</a>
+	<ul data-bind="foreach: children()">
+		<li><a data-bind="text: name, attr: { href: '#'+fullId }">Menu</a></li>
+	</ul>
+	</li>
+	<!-- /ko -->
 </ul>
 </section>
 
@@ -46,10 +58,10 @@
 <div id="prefs">
 <h3>Preferences</h3>
 <ul>
-	<li><input type="checkbox" id="instructions-disabled" /> <label for="instructions-disabled">Show instructions</label></li>
-	<li><input type="checkbox" id="grid-disabled" /> <label for="grid-disabled">Show grid</label></li>
-	<li><input type="checkbox" id="rekt-small-disabled" /> <label for="rekt-small-disabled">Show coordinates next to button labels</label></li>
-	<li><input type="checkbox" id="refs-disabled" /> <label for="refs-disabled">Show reference links next to button labels</label></li>
+	<li><input type="checkbox" id="instructions-disabled" data-bind="checked: pref.instructions" /> <label for="instructions-disabled">Show instructions</label></li>
+	<li><input type="checkbox" id="grid-disabled" data-bind="checked: pref.grid" /> <label for="grid-disabled">Show grid</label></li>
+	<li><input type="checkbox" id="rekt-small-disabled" data-bind="checked: pref.rektCoords" /> <label for="rekt-small-disabled">Show coordinates next to button labels</label></li>
+	<li><input type="checkbox" id="refs-disabled" data-bind="checked: pref.refs" /> <label for="refs-disabled">Show reference links next to button labels</label></li>
 	<li>
 		<input type="range" min="2" max="6" value="4" id="scale-main-slider" />
 		<label for="scale-main-slider">Scale main screen by <span id="scale-main-value">?</span>×</label>
@@ -57,7 +69,54 @@
 </ul>
 </div>
 
-<div id="screens">
+<div id="screens" data-bind="foreach: game().children()">
+	<div class="category" data-bind="attr: { id: fullId }">
+		<h2><strong data-bind="text: name">Category</strong> screens</h2>
+		<!-- ko foreach: children() -->
+		<div class="menu" data-bind="attr: { id: fullId }">
+			<div class="menu-heading">
+				<h3>
+					<label data-bind="attr: { for: '_'+fullId }">
+						<span data-bind="text: name">Screen</span>
+						<span class="permalink">
+							<a title="Permalink to this screen" data-bind="attr: { href: '#'+fullId }">#</a>
+						</span>
+					</label>
+				</h3>
+				<div class="toggle">
+					<label data-bind="attr: { for: '_'+fullId }">Toggle buttons to</label>
+					<input type="checkbox" data-bind="checked: state().checked, attr: { id: '_'+fullId, indeterminate: state().indeterminate }" />
+				</div>
+				<div class="layers scale-menu">
+					<img data-bind="attr: { id: fullId+'-image', src: image }" />
+					<canvas width="320" height="240" />
+				</div>
+			</div>
+			<div class="menu-list">
+				<ul data-bind="foreach: children()">
+					<li class="rekt" data-bind="attr: { id: fullId }">
+						<input type="checkbox" data-bind="checked: state().checked, attr: { id: '_'+fullId, indeterminate: state().indeterminate }" />
+						<label data-bind="attr: { for: '_'+fullId }">
+							<span class="name">
+								<span data-bind="text: name">Button</span>
+								<span class="permalink">
+									<a title="Permalink to this button" data-bind="attr: { href: '#'+fullId }">#</a>
+								</span>
+							</span>
+							<small data-bind="style: { backgroundColor: $root.getPaletteColor($index) }"><span>
+									&#8598; <span data-bind="text: coords.p1().join()">X1,Y1</span><br/>
+									&#8600; <span data-bind="text: coords.p2().join()">X2,Y2</span>
+							</span></small>
+						</label>
+						<div class="refs" data-bind="foreach: refs">
+							<a class="ref" data-bind="text: name(), attr: { href: link() }, css: refClass()">Button</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /ko -->
+	</li>
 </div>
 
 <div id="premium">
@@ -97,12 +156,15 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>
 <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+<!--
 <script src="state.js"></script>
 <script src="draw.js"></script>
 <script src="load.js"></script>
 <script src="encode.js"></script>
 <script src="coords.js"></script>
 <script src="onset.js"></script>
+-->
+<script src="data/x/data.js"></script>
 <script src="js/model.js"></script>
 <script src="js/load.js"></script>
 <script src="http://ophir.li/tpp/ga/ga.js"></script>

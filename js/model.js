@@ -133,7 +133,9 @@ var Menu = function(category, id, name, desc) {
 	Parent.call(this, category, id);
 	this.name = name;
 	this.desc = desc || null;
+
 	this.title = this.parent.name + " \u203A " + this.name;
+	this.image = 'data/' + this.root.id + '/screens/' + this.parent.name + '/' + this.name + '.png';
 };
 Menu.prototype = Object.create(Parent.prototype);
 
@@ -142,7 +144,7 @@ var Button = function(menu, id, name, coords, refs) {
 	this.name = name;
 	this.coords = coords;
 	this.refs = refs;
-	
+
 	this.title = this.parent.name + " \u203A " + this.name;
 };
 Button.prototype = Object.create(Node.prototype);
@@ -160,16 +162,17 @@ function MenuRef(game, menuId) {
 	this.menu = ko.computed(function() {
 		return game.getChild(menuId);
 	});
-	this.name = this._menuGetter("name");
-	this.link = this._menuGetter("fullId");
-	this.title = this._menuGetter("title");
+	this.name = this._menuGetter(function(menu) { return menu.name; });
+	this.link = this._menuGetter(function(menu) { return "#" + menu.fullId; });
+	this.title = this._menuGetter(function(menu) { return menu.title; });
+	this.refClass = ko.observable("");
 };
 MenuRef.prototype = Object.create(Ref.prototype);
 ko.utils.extend(MenuRef.prototype, {
-	_menuGetter: function(prop) {
+	_menuGetter: function(getter) {
 		return ko.computed(function() {
 			var menu = this.menu();
-			return menu && menu[prop];
+			return menu && getter(menu);
 		}, this);
 	},
 });
