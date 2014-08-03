@@ -1,7 +1,8 @@
-var game = 'x';
-var game_name = 'X';
-var bounds =                [  0,   0,   319, 239];
-var coords = {
+loadGame({
+"game":                     'x',
+"game_name":                'X',
+"bounds":                   [  0,   0,   319, 239],
+"coords": {
 "Battle": {
 	"id": "b",
 	"Battle": {
@@ -567,4 +568,5 @@ var coords = {
 		"Froakie":          { "id": "C", "coords": [230, 115,   259, 144], "ref": "   " },
 	},
 },
-};
+}
+});

@@ -1,82 +1,84 @@
-var palette = [
-	'rgb(200, 42,102)', 'rgb(232,157, 52)', 'rgb(206, 98,195)', 'rgb(178,223, 75)', 'rgb( 97,223,181)', 'rgb(255,135, 83)', 'rgb(255,255,111)',
-	'rgb(223, 38, 65)', 'rgb(185,202,246)', 'rgb(217,142,  0)', 'rgb(255,255,  1)', 'rgb( 70,138,126)', 'rgb(255,189,211)', 'rgb(161, 38,148)',
-	'rgb( 88,150, 62)', 'rgb(237,185, 52)', 'rgb( 85, 78,148)', 'rgb(255,198,187)', 'rgb(128,128,  0)', 'rgb(128 , 0, 64)', 'rgb(255,255,195)'
-];
+var Games = (function(window, document, $) {
 
-function ignoreId(id) {
-	return id === "id" || id === "desc";
-}
-
-function parseHierarchy(parent, data, parseChildFn) {
-	var children = [];
-	ko.utils.objectForEach(data, function(childName, childData) {
-		if (ignoreId(childName)) return;
-		children.push(parseChildFn(parent, childName, childData));
-	});
-	ko.utils.arrayPushAll(parent.children, children);
-}
-
-function parseGame(data) {
-	var game = new Game(data.game, data.game_name, new Rect(data.bounds));
-	parseHierarchy(game, data.coords, parseCategory);
-	return game;
-}
-
-function parseCategory(game, categName, categData) {
-	var category = new Category(game, categData.id, categName);
-	parseHierarchy(category, categData, parseMenu);
-	return category;
-}
-
-function parseMenu(category, menuName, menuData) {
-	var menu = new Menu(category, menuData.id, menuName);
-	parseHierarchy(menu, menuData, parseButton);
-	return menu;
-}
-
-function parseButton(menu, buttonName, buttonData) {
-	var refs = [],
-		rawRefs = buttonData.ref;
-	rawRefs = typeof rawRefs === "string" ? [rawRefs] : rawRefs || [];
-	ko.utils.arrayForEach(rawRefs, function(rawRef) {
-		var ref = parseRef(menu.root, rawRef);
-		ref && refs.push(ref);
-	});
-	var button = new Button(menu, buttonData.id, buttonName, new Rect(buttonData.coords), refs);
-	return button;
-}
-
-function parseRef(game, ref) {
-	if (ref === "NEW") {
-		return Ref.NEW;
-	} else if (ref === "END") {
-		return Ref.END;
-	} else if (/^\s*$/.test(ref)) {
-		return null;
-	} else {
-		return new MenuRef(game, ref);
-	}
-}
-
-$(function() {
-	var input = {
-		game: game,
-		game_name: game_name,
-		bounds: bounds,
-		coords: coords,
-	}
-	ko.applyBindings({
-		game: ko.observable(parseGame(input)),
-		pref: {
-			instructions: ko.observable(false),
-			grid:         ko.observable(true),
-			rektCoords:   ko.observable(true),
-			refs:         ko.observable(false),
+	var loader = {
+		loading: {},
+		loadGame: function(gameId) {
+			var deferred = this.loading[gameId], s;
+			if (!deferred) {
+				deferred = this.loading[gameId] = $.Deferred();
+				currentLoadId = gameId;
+				s = document.createElement('script');
+				s.src = 'data/' + gameId + '/data.js';
+				s.onerror = function(e) {
+					var e = new Error("Invalid game id '" + game + "'");
+					deferred.reject(e);
+				};
+				document.head.appendChild(s);
+			}
+			return deferred.promise();
 		},
-		getPaletteColor: function(index) {
-			index = ko.unwrap(index);
-			return palette[index % palette.length];
+		onLoad: function(data) {
+			var game = parser.parseGame(data);
+			this.loading[game.id].resolve(game);
 		}
-	});
-});
+	};
+	window.loadGame = loader.onLoad.bind(loader);
+	
+	var parser = {
+		ignoreId: function(id) {
+			return id === "id" || id === "desc";
+		},
+		parseHierarchy: function(parent, data, parseChildFn) {
+			var children = [], childData;
+			for (var childName in data) {
+				if (this.ignoreId(childName)) continue;
+				childData = data[childName];
+				children.push(parseChildFn.call(this, parent, childName, childData));
+			}
+			ko.utils.arrayPushAll(parent.children, children);
+		},
+		parseGame: function(data) {
+			var game = new Game(data.game, data.game_name, new Rect(data.bounds));
+			this.parseHierarchy(game, data.coords, this.parseCategory);
+			return game;
+		},
+		parseCategory: function(game, categName, categData) {
+			var category = new Category(game, categData.id, categName);
+			this.parseHierarchy(category, categData, this.parseMenu);
+			return category;
+		},
+		parseMenu: function(category, menuName, menuData) {
+			var menu = new Menu(category, menuData.id, menuName);
+			this.parseHierarchy(menu, menuData, this.parseButton);
+			return menu;
+		},
+		parseButton: function(menu, buttonName, buttonData) {
+			var refs = [],
+				rawRefs = buttonData.ref;
+			rawRefs = typeof rawRefs === "string" ? [rawRefs] : rawRefs || [];
+			ko.utils.arrayForEach(rawRefs, function(rawRef) {
+				var ref = this.parseRef(menu.root, rawRef);
+				ref && refs.push(ref);
+			}.bind(this));
+			var button = new Button(menu, buttonData.id, buttonName, new Rect(buttonData.coords), refs);
+			return button;
+		},
+		parseRef: function(game, ref) {
+			if (ref === "NEW") {
+				return Ref.NEW;
+			} else if (ref === "END") {
+				return Ref.END;
+			} else if (/^\s*$/.test(ref)) {
+				return null;
+			} else {
+				return new MenuRef(game, ref);
+			}
+		}
+	};
+	
+	return {
+		load: loader.loadGame.bind(loader),
+		parse: parser.parseGame.bind(parser)
+	};
+
+})(window, document, jQuery);
