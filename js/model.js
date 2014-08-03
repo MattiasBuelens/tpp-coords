@@ -1,7 +1,7 @@
 var State2 = {
-	HIT:    { id: 'HIT',    checked: true,  indeterminate: false },
-	MISS:   { id: 'MISS',   checked: false, indeterminate: true  },
-	IGNORE: { id: 'IGNORE', checked: false, indeterminate: false },
+	HIT:    { id: 'HIT'    },
+	MISS:   { id: 'MISS'   },
+	IGNORE: { id: 'IGNORE' },
 };
 State2.HIT.next    = State2.MISS;
 State2.MISS.next   = State2.IGNORE;

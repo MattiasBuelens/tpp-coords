@@ -75,7 +75,7 @@ $(function() {
 			refs:         ko.observable(false),
 		},
 		getPaletteColor: function(index) {
-			index = ko.utils.unwrapObservable(index);
+			index = ko.unwrap(index);
 			return palette[index % palette.length];
 		}
 	});

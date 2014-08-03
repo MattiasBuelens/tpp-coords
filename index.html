@@ -85,7 +85,7 @@
 				</h3>
 				<div class="toggle">
 					<label data-bind="attr: { for: '_'+fullId }">Toggle buttons to</label>
-					<input type="checkbox" data-bind="checked: state().checked, attr: { id: '_'+fullId, indeterminate: state().indeterminate }" />
+					<input type="checkbox" data-bind="tppState: state, attr: { id: '_'+fullId }" />
 				</div>
 				<div class="layers scale-menu">
 					<img data-bind="attr: { id: fullId+'-image', src: image }" />
@@ -95,7 +95,7 @@
 			<div class="menu-list">
 				<ul data-bind="foreach: children()">
 					<li class="rekt" data-bind="attr: { id: fullId }">
-						<input type="checkbox" data-bind="checked: state().checked, attr: { id: '_'+fullId, indeterminate: state().indeterminate }" />
+						<input type="checkbox" data-bind="tppState: state, attr: { id: '_'+fullId }" />
 						<label data-bind="attr: { for: '_'+fullId }">
 							<span class="name">
 								<span data-bind="text: name">Button</span>
@@ -166,6 +166,7 @@
 -->
 <script src="data/x/data.js"></script>
 <script src="js/model.js"></script>
+<script src="js/bindings.js"></script>
 <script src="js/load.js"></script>
 <script src="http://ophir.li/tpp/ga/ga.js"></script>
 </body>
