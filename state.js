@@ -4,7 +4,7 @@ var Box = {
 	unchecked:     { next: 'checked',       checked: false, indeterminate: false, },
 };
 
-var defaultGame = 'x';
+var defaultGame = 'oras';
 
 var State = (function() {
 	var _State = {
